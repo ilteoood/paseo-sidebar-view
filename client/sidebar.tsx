@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState, type ReactElement } from "react";
 import { Pressable, Text, View } from "react-native";
+import type { ViewInstance } from "react-native";
 import type { PluginWorkspaceSnapshot, WorkspaceIndicator } from "@getpaseo/plugin";
 import {
   type PluginSidebarViewProps,
@@ -111,7 +112,7 @@ const statusIconForBucket: Record<StatusBucket, string> = {
   done: "Check",
 };
 
-function measureInWindow(node: View, receive: (rect: Rect) => void) {
+function measureInWindow(node: ViewInstance, receive: (rect: Rect) => void) {
   node.measureInWindow((left, top, width, height) => receive({ left, top, width, height }));
 }
 
@@ -136,8 +137,8 @@ export function SortedSidebar(view: PluginSidebarViewProps) {
   const now = useNow(values.trailing === "timestamp" ? 60_000 : null);
   const hosts = useHosts();
   const hostLabels = new Map(hosts.map((host) => [host.serverId, host.label]));
-  const rootRef = useRef<View | null>(null);
-  const displayTriggerRef = useRef<View | null>(null);
+  const rootRef = useRef<ViewInstance | null>(null);
+  const displayTriggerRef = useRef<ViewInstance | null>(null);
   const [menu, setMenu] = useState<MenuRequest | null>(null);
   const [collapsedProjects, setCollapsedProjects] = useState<readonly string[]>([]);
   const [collapsedStatusGroups, setCollapsedStatusGroups] = useState<readonly string[]>([]);
@@ -234,7 +235,7 @@ const projectMeta = useMemo(() => {
   const showPage = (page: DisplayPage) =>
     setMenu((current) => (current && current.kind === "display" ? { ...current, page } : current));
 
-  const anchorMenu = (node: View | null, build: (anchor: MenuAnchor) => MenuRequest) => {
+  const anchorMenu = (node: ViewInstance | null, build: (anchor: MenuAnchor) => MenuRequest) => {
     const root = rootRef.current;
     if (!root) return;
     measureInWindow(root, (rootRect) => {
@@ -248,7 +249,7 @@ const projectMeta = useMemo(() => {
   };
   const openMenu: OpenMenu = (node, entries) =>
     anchorMenu(node, (anchor) => ({ kind: "actions", entries, ...anchor }));
-  const openDisplayMenu = (node: View | null) =>
+  const openDisplayMenu = (node: ViewInstance | null) =>
     anchorMenu(node, (anchor) => ({ kind: "display", page: "root", ...anchor }));
 
   useEffect(() => {
