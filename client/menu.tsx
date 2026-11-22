@@ -1,5 +1,5 @@
 import { Pressable, Text, View } from "react-native";
-import type { PressableStateCallbackType } from "react-native";
+import type { PressableStateCallbackType, ViewInstance } from "react-native";
 import type { PluginSidebarViewProps } from "@getpaseo/plugin/client";
 import { Icon, ScrollView } from "@getpaseo/plugin/client/ui";
 import {
@@ -18,12 +18,12 @@ export type ActionPressState = PressableStateCallbackType & { readonly hovered?:
 
 
 export type MenuAnchor = {
-  readonly node: View | null;
+  readonly node: ViewInstance | null;
   readonly root: { readonly left: number; readonly top: number; readonly width: number; readonly height: number };
   readonly anchor: { readonly left: number; readonly top: number; readonly width: number; readonly height: number };
 };
 
-export type OpenMenu = (node: View | null, entries: readonly MenuEntry[]) => void;
+export type OpenMenu = (node: ViewInstance | null, entries: readonly MenuEntry[]) => void;
 
 export function menuCardHeight(entries: readonly MenuEntry[]): number {
   const rows = entries.reduce(

@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import type { ReactNode } from "react";
 import { Pressable, Text, View } from "react-native";
+import type { ViewInstance } from "react-native";
 import type { WorkspaceIndicator } from "@getpaseo/plugin";
 import {
   type PluginSidebarViewProps,
@@ -91,8 +92,8 @@ function useFailureReporter() {
   };
 }
 
-function useRowChrome(menuAnchor: View | null) {
-  const rowRef = useRef<View | null>(null);
+function useRowChrome(menuAnchor: ViewInstance | null) {
+  const rowRef = useRef<ViewInstance | null>(null);
   const [hovered, setHovered] = useState(false);
   const [pressed, setPressed] = useState(false);
   const menuOpen = rowRef.current !== null && menuAnchor === rowRef.current;
@@ -325,7 +326,7 @@ export function WorkspaceRow({
   view: PluginSidebarViewProps;
   now: number;
   onOpenActions: OpenMenu;
-  menuAnchor: View | null;
+  menuAnchor: ViewInstance | null;
 }) {
   const workspace = useWorkspace(reference);
   const paseo = usePaseo();
@@ -585,7 +586,7 @@ export function ProjectHeaderRow({
   collapsed: boolean;
   onToggleCollapsed: () => void;
   onOpenActions: OpenMenu;
-  menuAnchor: View | null;
+  menuAnchor: ViewInstance | null;
 meta?: { readonly isArchiving: boolean; readonly statusBucket: WorkspaceIndicator | null } | null;
 }) {
   const project = useProject(reference);
