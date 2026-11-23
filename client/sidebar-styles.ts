@@ -116,7 +116,6 @@ export const menuIconSize = 14;
 export const menuSeparatorHeight = 9;
 
 export const filledDotSize = 6;
-export const doneDotOpacity = 0.3;
 export const titleIdleOpacity = 0.76;
 export const statusIconSize = 12;
 export const runningIconSize = 14;

@@ -39,6 +39,7 @@ import {
   listPadding,
   menuRowMinHeight,
 } from "./sidebar-styles.ts";
+import { statusColor, statusIcon } from "./status-presentation.ts";
 import { useNow } from "./use-now.ts";
 import { projectsInGroupRank, workspaceComparator } from "./workspace-sort.ts";
 
@@ -95,22 +96,6 @@ function statusRank(bucket: string): number {
   const index = statusBuckets.indexOf(bucket as StatusBucket);
   return index === -1 ? statusBuckets.length : index;
 }
-function statusColor(
-  indicator: StatusBucket,
-  colors: PluginSidebarViewProps["theme"]["colors"],
-): string {
-  if (indicator === "failed") return colors.statusDanger;
-  if (indicator === "attention") return colors.statusSuccess;
-  if (indicator === "needs_input" || indicator === "running") return colors.statusWarning;
-  return colors.foregroundMuted;
-}
-const statusIconForBucket: Record<StatusBucket, string> = {
-  needs_input: "CircleAlert",
-  failed: "CircleX",
-  running: "CircleDot",
-  attention: "CircleCheck",
-  done: "Check",
-};
 
 function measureInWindow(node: ViewInstance, receive: (rect: Rect) => void) {
   node.measureInWindow((left, top, width, height) => receive({ left, top, width, height }));
@@ -307,7 +292,7 @@ const projectMeta = useMemo(() => {
         title: group.title ?? bucket,
         collapsed,
         color: group.color ?? view.theme.colors.foregroundMuted,
-        iconName: statusIconForBucket[bucket] ?? "CircleDot",
+        iconName: statusIcon(bucket),
         count: group.items.length,
         endsGroup: lastGroup,
       });
