@@ -59,14 +59,6 @@ export const statusGroupHeader = {
   paddingBottom: 2,
   cursor: "pointer",
 } as const;
-export const archiveAction = {
-  width: 22,
-  height: 28,
-  marginVertical: -8,
-  marginRight: -2,
-  alignItems: "center",
-  justifyContent: "center",
-} as const;
 export const statusHeaderLeading = { width: 14, height: 14, alignItems: "center", justifyContent: "center" } as const;
 export const leadingSlot = { width: 16, height: 20, alignItems: "center", justifyContent: "center" } as const;
 export const trailingHitBox = {
@@ -84,6 +76,11 @@ export const trailingHighlight = {
   borderRadius: 6,
   alignItems: "center",
   justifyContent: "center",
+} as const;
+// The workspace row gaps its trailing actions 4px tighter, so the archive clears that difference to land on the plus box.
+export const archiveAction = {
+  ...trailingHitBox,
+  marginRight: trailingHitBox.marginRight + projectRow.gap - workspaceRow.gap,
 } as const;
 export const displayTrigger = {
   width: 24,

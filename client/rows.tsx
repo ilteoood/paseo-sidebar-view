@@ -440,25 +440,23 @@ export function WorkspaceRow({
             disabled={workspace.archivingAt !== null}
             onHoverIn={() => chrome.setHovered(true)}
             onHoverOut={() => chrome.setHovered(false)}
+            onFocus={() => chrome.setHovered(true)}
+            onBlur={() => chrome.setHovered(false)}
             onPress={() =>
               reportFailure("Could not archive the workspace", () => workspaceActions().archive())
             }
-            hitSlop={4}
-            style={({ hovered, pressed }: ActionPressState) => ({
+            pointerEvents={chrome.showsChrome ? "auto" : "none"}
+            style={{
               ...archiveAction,
-              marginLeft: !isTouchPlatform && !chrome.showsChrome ? -22 : 0,
-              opacity: workspace.archivingAt !== null ? 0.5 : chrome.showsChrome ? 1 : isTouchPlatform ? 1 : 0,
+              marginLeft: !isTouchPlatform && !chrome.showsChrome ? -(archiveAction.width + archiveAction.marginRight) : 0,
+              opacity: workspace.archivingAt !== null ? 0.5 : chrome.showsChrome ? 1 : 0,
               cursor: "pointer",
-            })}
+            }}
           >
             {({ hovered: h, pressed: p }: ActionPressState) => (
               <View
                 style={{
-                  width: 22,
-                  height: 22,
-                  borderRadius: 6,
-                  alignItems: "center",
-                  justifyContent: "center",
+                  ...trailingHighlight,
                   backgroundColor: h || p ? view.theme.colors.surface2 : undefined,
                 }}
               >
