@@ -23,6 +23,8 @@ import { removalMessage } from "./removal-message.ts";
 import { formatRelativeTime } from "./relative-time.ts";
 import { statusColor, statusIcon } from "./status-presentation.ts";
 import {
+  doneDotOpacity,
+  filledDotSize,
   hoverTint,
   isTouchPlatform,
   leadingSlot,
@@ -217,6 +219,19 @@ function StatusIndicator({
   const { colors } = view.theme;
   if (indicator === "running") {
     return <Spinner size={spinnerSize} color={colors.statusWarning} />;
+  }
+  if (indicator === "done") {
+    return (
+      <View
+        style={{
+          width: filledDotSize,
+          height: filledDotSize,
+          borderRadius: filledDotSize / 2,
+          backgroundColor: colors.foregroundMuted,
+          opacity: doneDotOpacity,
+        }}
+      />
+    );
   }
   return (
     <Icon name={statusIcon(indicator)} size={iconSize} color={statusColor(indicator, colors)} />
@@ -593,7 +608,7 @@ meta?: { readonly isArchiving: boolean; readonly statusBucket: WorkspaceIndicato
           <View style={leadingSlot}>
 {meta?.isArchiving ? (
               <Spinner size={16} color={view.theme.colors.foregroundMuted} />
-            ) : meta?.statusBucket ? (
+            ) : meta?.statusBucket && meta.statusBucket !== "done" ? (
               <StatusIndicator
                 indicator={meta.statusBucket}
                 view={view}
