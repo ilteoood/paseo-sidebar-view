@@ -28,7 +28,6 @@ const rowItemIcons: Record<RowItem, string> = {
   branch: "GitBranch",
   project: "Folder",
   host: "Server",
-  status: "CircleDashed",
   labels: "Tag",
 };
 

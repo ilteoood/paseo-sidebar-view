@@ -7,7 +7,7 @@ A Paseo plugin that replaces the sidebar content with its own sortable, filterab
 - Sorting by name, creation time, or last prompt.
 - Grouping by project or by status, with collapsible groups; status headers carry their count.
 - Pinned workspaces in a "Pinned" section above the rest.
-- Configurable rows: title taken from the workspace title or its branch; branch, project, host, status, and labels shown or hidden; a trailing slot for added/removed line counts or a relative timestamp.
+- Configurable rows: title taken from the workspace title or its branch; branch, project, host, and labels shown or hidden; a trailing slot for added/removed line counts or a relative timestamp.
 - Host and project filters, and a switch that reveals background workspaces.
 - Row actions: new workspace, copy path, copy branch name, rename, pin, archive.
 - Project actions: open project settings (desktop app only), remove the project after a confirmation.
@@ -39,7 +39,6 @@ Preferences are stored per device through `defineSettings({ id: "sort", scope: "
 | Show branch | on, off | on |
 | Show project | on, off | off |
 | Show host | on, off | off |
-| Show status | on, off | on |
 | Show labels | on, off | off |
 | Trailing slot | `none`, `diff`, `timestamp` | `none` |
 | Host filter | list of host ids; empty means every host | empty |

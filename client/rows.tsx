@@ -21,9 +21,8 @@ import type { ActionPressState, OpenMenu } from "./menu.tsx";
 import type { MenuEntry } from "./menu-entries.ts";
 import { removalMessage } from "./removal-message.ts";
 import { formatRelativeTime } from "./relative-time.ts";
+import { statusColor, statusIcon } from "./status-presentation.ts";
 import {
-  doneDotOpacity,
-  filledDotSize,
   hoverTint,
   isTouchPlatform,
   leadingSlot,
@@ -53,33 +52,7 @@ type MetaItem = {
   readonly key: string;
   readonly icon: string;
   readonly text: string;
-  readonly color?: string;
 };
-
-const statusItemIcons: Record<WorkspaceIndicator, string> = {
-  needs_input: "CircleAlert",
-  failed: "CircleX",
-  running: "LoaderCircle",
-  attention: "CircleCheck",
-  done: "CircleDashed",
-};
-const statusItemTexts: Record<WorkspaceIndicator, string> = {
-  needs_input: "Needs input",
-  failed: "Failed",
-  running: "Working",
-  attention: "Ready to review",
-  done: "Done",
-};
-
-function statusItemColor(
-  indicator: WorkspaceIndicator,
-  colors: PluginSidebarViewProps["theme"]["colors"],
-): string {
-  if (indicator === "failed") return colors.statusDanger;
-  if (indicator === "attention") return colors.statusSuccess;
-  if (indicator === "needs_input" || indicator === "running") return colors.statusWarning;
-  return colors.foregroundMuted;
-}
 
 function useFailureReporter() {
   const toast = useToast();
@@ -233,33 +206,20 @@ export function StatusGroupHeader({
 function StatusIndicator({
   indicator,
   view,
+  iconSize = statusIconSize,
+  spinnerSize = runningIconSize,
 }: {
   indicator: WorkspaceIndicator;
   view: PluginSidebarViewProps;
+  iconSize?: number;
+  spinnerSize?: number;
 }) {
   const { colors } = view.theme;
-  if (indicator === "needs_input") {
-    return <Icon name="CircleAlert" size={statusIconSize} color={colors.statusWarning} />;
-  }
   if (indicator === "running") {
-    return <Spinner size={runningIconSize} color={colors.statusWarning} />;
+    return <Spinner size={spinnerSize} color={colors.statusWarning} />;
   }
-  const fill =
-    indicator === "attention"
-      ? colors.statusSuccess
-      : indicator === "failed"
-        ? colors.statusDanger
-        : colors.foregroundMuted;
   return (
-    <View
-      style={{
-        width: filledDotSize,
-        height: filledDotSize,
-        borderRadius: filledDotSize / 2,
-        backgroundColor: fill,
-        opacity: indicator === "done" ? doneDotOpacity : 1,
-      }}
-    />
+    <Icon name={statusIcon(indicator)} size={iconSize} color={statusColor(indicator, colors)} />
   );
 }
 
@@ -290,7 +250,7 @@ function MetaLine({
               {"\u00b7"}
             </Text>
           ) : null}
-          <Icon name={item.icon} size={12} color={item.color ?? colors.foregroundMuted} />
+          <Icon name={item.icon} size={12} color={colors.foregroundMuted} />
           <Text
             numberOfLines={1}
             style={{
@@ -298,7 +258,7 @@ function MetaLine({
               fontSize: 12,
               lineHeight: 16,
               flexShrink: 1,
-              color: item.color ?? colors.foregroundMuted,
+              color: colors.foregroundMuted,
             }}
           >
             {item.text}
@@ -343,22 +303,12 @@ export function WorkspaceRow({
   const branch = workspace.branch;
   const pinned = workspace.pinnedAt !== null;
   const hostLabel = hostLabels.get(workspace.hostId) ?? workspace.hostId;
-  const statusItem: MetaItem | null =
-    rowItems.status && workspace.indicator !== "done" && workspace.indicator !== "running"
-      ? {
-          key: "status",
-          icon: statusItemIcons[workspace.indicator],
-          text: workspace.indicatorLabel ?? statusItemTexts[workspace.indicator],
-          color: statusItemColor(workspace.indicator, view.theme.colors),
-        }
-      : null;
   const metaItems: readonly MetaItem[] = [
     ...(rowItems.branch && branch ? [{ key: "branch", icon: "GitBranch", text: branch }] : []),
     ...(rowItems.project
       ? [{ key: "project", icon: "Folder", text: workspace.projectDisplayName }]
       : []),
     ...(rowItems.host ? [{ key: "host", icon: "Server", text: hostLabel }] : []),
-    ...(statusItem ? [statusItem] : []),
     ...(rowItems.labels && workspace.labels.length > 0
       ? [{ key: "labels", icon: "Tag", text: workspace.labels.join(", ") }]
       : []),
@@ -645,14 +595,13 @@ meta?: { readonly isArchiving: boolean; readonly statusBucket: WorkspaceIndicato
           <View style={leadingSlot}>
 {meta?.isArchiving ? (
               <Spinner size={16} color={view.theme.colors.foregroundMuted} />
-            ) : meta?.statusBucket === "running" ? (
-              <Spinner size={16} color={view.theme.colors.statusWarning} />
-            ) : meta?.statusBucket === "needs_input" ? (
-              <Icon name="CircleAlert" size={16} color={view.theme.colors.statusWarning} />
-            ) : meta?.statusBucket === "failed" ? (
-              <Icon name="CircleX" size={16} color={view.theme.colors.statusDanger} />
-            ) : meta?.statusBucket === "attention" ? (
-              <Icon name="CircleCheck" size={16} color={view.theme.colors.statusSuccess} />
+            ) : meta?.statusBucket ? (
+              <StatusIndicator
+                indicator={meta.statusBucket}
+                view={view}
+                iconSize={16}
+                spinnerSize={16}
+              />
             ) : chrome.showsChrome ? (
               <Icon
                 name={collapsed ? "ChevronRight" : "ChevronDown"}
