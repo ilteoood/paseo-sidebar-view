@@ -344,7 +344,7 @@ export function WorkspaceRow({
   const pinned = workspace.pinnedAt !== null;
   const hostLabel = hostLabels.get(workspace.hostId) ?? workspace.hostId;
   const statusItem: MetaItem | null =
-    rowItems.status && workspace.indicator !== "done"
+    rowItems.status && workspace.indicator !== "done" && workspace.indicator !== "running"
       ? {
           key: "status",
           icon: statusItemIcons[workspace.indicator],
