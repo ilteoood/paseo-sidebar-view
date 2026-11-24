@@ -314,9 +314,6 @@ export function WorkspaceRow({
   const hostLabel = hostLabels.get(workspace.hostId) ?? workspace.hostId;
   const metaItems: readonly MetaItem[] = [
     ...(rowItems.branch && branch ? [{ key: "branch", icon: "GitBranch", text: branch }] : []),
-    ...(rowItems.project
-      ? [{ key: "project", icon: "Folder", text: workspace.projectDisplayName }]
-      : []),
     ...(rowItems.host ? [{ key: "host", icon: "Server", text: hostLabel }] : []),
     ...(rowItems.labels && workspace.labels.length > 0
       ? [{ key: "labels", icon: "Tag", text: workspace.labels.join(", ") }]

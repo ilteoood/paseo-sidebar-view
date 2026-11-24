@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { preferencesSchema } from "./preferences.ts";
 
-test("keeps every display preference when a stored document still lists the dropped status row item", () => {
+test("keeps every display preference when a stored document still lists dropped row items", () => {
   const parsed = preferencesSchema.safeParse({
     workspaceSort: "created",
     grouping: "status",
@@ -19,7 +19,7 @@ test("keeps every display preference when a stored document still lists the drop
     workspaceSort: "created",
     grouping: "status",
     titleSource: "branch",
-    rowItems: { branch: false, project: true, host: true, labels: true },
+    rowItems: { branch: false, host: true, labels: true },
     trailing: "diff",
     hostFilters: ["alpha"],
     projectFilters: ["project-a"],

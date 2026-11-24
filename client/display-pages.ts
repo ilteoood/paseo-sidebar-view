@@ -26,7 +26,6 @@ const groupingIcons: Record<Grouping, string> = { project: "Folder", status: "Ci
 const titleSourceIcons: Record<TitleSource, string> = { title: "Type", branch: "GitBranch" };
 const rowItemIcons: Record<RowItem, string> = {
   branch: "GitBranch",
-  project: "Folder",
   host: "Server",
   labels: "Tag",
 };
