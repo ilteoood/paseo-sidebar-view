@@ -39,7 +39,6 @@ import {
   listPadding,
   menuRowMinHeight,
 } from "./sidebar-styles.ts";
-import { statusColor, statusIcon } from "./status-presentation.ts";
 import { useNow } from "./use-now.ts";
 import { projectsInGroupRank, workspaceComparator } from "./workspace-sort.ts";
 
@@ -53,8 +52,7 @@ type SidebarRow =
       readonly key: string;
       readonly title: string;
       readonly collapsed: boolean;
-      readonly color: string;
-      readonly iconName: string;
+      readonly indicator: StatusBucket;
       readonly count: number;
       readonly endsGroup: boolean;
     }
@@ -173,7 +171,6 @@ const projectMeta = useMemo(() => {
           groupBy: (workspace) => ({
             key: workspace.indicator,
             title: workspace.indicatorLabel ?? workspace.indicator,
-            color: statusColor(workspace.indicator, view.theme.colors),
           }),
         })
       : useWorkspaces({
@@ -291,8 +288,7 @@ const projectMeta = useMemo(() => {
         key: `status:${bucket}`,
         title: group.title ?? bucket,
         collapsed,
-        color: group.color ?? view.theme.colors.foregroundMuted,
-        iconName: statusIcon(bucket),
+        indicator: bucket,
         count: group.items.length,
         endsGroup: lastGroup,
       });
@@ -391,8 +387,7 @@ const projectMeta = useMemo(() => {
           <View style={item.endsGroup ? groupSpacing : undefined}>
             <StatusGroupHeader
               title={item.title}
-              color={item.color}
-              leadingIconName={item.iconName}
+              indicator={item.indicator}
               collapsed={item.collapsed}
               count={item.count}
               view={view}

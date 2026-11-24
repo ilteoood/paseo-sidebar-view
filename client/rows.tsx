@@ -149,16 +149,14 @@ export function SectionHeader({
 }
 export function StatusGroupHeader({
   title,
-  color,
-  leadingIconName,
+  indicator,
   collapsed,
   count,
   view,
   onToggle,
 }: {
   title: string;
-  color: string;
-  leadingIconName: string;
+  indicator: WorkspaceIndicator;
   collapsed: boolean;
   count: number;
   view: PluginSidebarViewProps;
@@ -179,12 +177,8 @@ export function StatusGroupHeader({
           color={view.theme.colors.foregroundMuted}
         />
         <View style={statusHeaderLeading}>
-{leadingIconName === "LoaderCircle" ? (
-            <Spinner size={12} color={color} />
-          ) : (
-            <Icon name={leadingIconName} size={12} color={color} />
-          )}
-</View>
+          <StatusIndicator indicator={indicator} view={view} iconSize={12} spinnerSize={12} />
+        </View>
         <Text
           numberOfLines={1}
           style={{

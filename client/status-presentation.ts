@@ -6,7 +6,7 @@ const statusIcons: Record<WorkspaceIndicator, string> = {
   failed: "CircleX",
   running: "LoaderCircle",
   attention: "CircleCheck",
-  done: "CircleCheck",
+  done: "CircleDashed",
 };
 
 export function statusIcon(indicator: WorkspaceIndicator): string {
