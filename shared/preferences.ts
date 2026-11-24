@@ -4,7 +4,7 @@ import { z } from "zod";
 export const workspaceSorts = ["created", "lastPrompt", "name"] as const;
 export const groupings = ["project", "status"] as const;
 export const titleSources = ["title", "branch"] as const;
-export const rowItems = ["branch", "project", "host", "labels"] as const;
+export const rowItems = ["branch", "host", "labels"] as const;
 export const trailingItems = ["none", "diff", "timestamp"] as const;
 
 export type WorkspaceSort = (typeof workspaceSorts)[number];
@@ -22,7 +22,6 @@ export const groupingLabels: Record<Grouping, string> = { project: "Project", st
 export const titleSourceLabels: Record<TitleSource, string> = { title: "Title", branch: "Branch" };
 export const rowItemLabels: Record<RowItem, string> = {
   branch: "Branch",
-  project: "Project",
   host: "Host",
   labels: "Labels",
 };
@@ -34,7 +33,6 @@ export const trailingLabels: Record<TrailingItem, string> = {
 
 const rowItemsSchema = z.object({
   branch: z.boolean().default(true),
-  project: z.boolean().default(false),
   host: z.boolean().default(false),
   labels: z.boolean().default(false),
 });
